@@ -10,11 +10,11 @@ oem:
 imagePullSecrets:
 psp: false
 rbac: true # required for rancher authentication
-serviceAccount: default
+serviceAccount: neuvector
 leastPrivilege: false
 global: # required for rancher authentication (https://<Rancher_URL>/)
   cattle:
-    url:
+    url: https://rancher.felab.io
 
 internal: # enable when cert-manager is installed for the internal certificates
   certmanager: 
@@ -33,7 +33,7 @@ controller:
   image:
     repository: neuvector/controller
     hash:
-  replicas: 3
+  replicas: 1
   disruptionbudget: 0
   schedulerName:
   priorityClassName:
@@ -79,7 +79,7 @@ controller:
         #  -----BEGIN PRIVATE KEY-----
         #  -----END PRIVATE KEY-----
   ranchersso: # required for rancher authentication
-    enabled: false
+    enabled: true
   pvc:
     enabled: false
     existingClaim: false
@@ -299,19 +299,21 @@ manager:
     keyFile: tls.key
     pemFile: tls.pem
   ingress:
-    enabled: false
+    enabled: true
     host:  # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/"
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      cert-manager.io/issuer: cluster-staging
+      cert-manager.io/issuer-kind: ClusterIssuer
       # kubernetes.io/ingress.class: my-nginx
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
       # nginx.ingress.kubernetes.io/rewrite-target: /
       # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
       # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
-    tls: false
-    secretName:  # my-tls-secret
+    tls: true
+    secretName: neuvector-ingress
   resources: {}
     # limits:
     #   cpu: 400m
@@ -423,7 +425,7 @@ cve:
     runAsUser:  # MUST be set for Rancher hardened cluster
   scanner:
     enabled: true
-    replicas: 3
+    replicas: 1
     dockerPath: ""
     strategy:
       type: RollingUpdate
@@ -471,7 +473,7 @@ resources: {}
   #   memory: 2280Mi
 
 k3s:
-  enabled: false
+  enabled: true
   runtimePath: /run/k3s/containerd/containerd.sock
 
 bottlerocket:
