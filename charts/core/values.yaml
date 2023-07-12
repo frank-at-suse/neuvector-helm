@@ -169,9 +169,9 @@ controller:
           #  -----BEGIN PRIVATE KEY-----
           #  -----END PRIVATE KEY-----
   ingress:
-    enabled: false
-    host:  # MUST be set, if ingress is enabled
-    ingressClassName: ""
+    enabled: true
+    host: nv-controller.felab.io
+    ingressClassName: haproxy
     path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
