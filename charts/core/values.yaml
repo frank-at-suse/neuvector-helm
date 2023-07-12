@@ -186,22 +186,17 @@ controller:
     #   cpu: 100m
     #   memory: 2280Mi
   configmap:
-    enabled: false
+    enabled: true
     data:
-      # passwordprofileinitcfg.yaml: |
-      #  ...
-      # roleinitcfg.yaml: |
-      #  ...
-      # ldapinitcfg.yaml: |
-      #  ...
-      # oidcinitcfg.yaml: |
-      # ...
-      # samlinitcfg.yaml: |
-      # ...
-      # sysinitcfg.yaml: |
-      # ...
-      # userinitcfg.yaml: |
-      # ...
+      sysinitcfg.yaml: |
+        new_service_profile_baseline: basic  # Disable automated protection that prevents processes and file system drift for new groups. Options are 'basic' and 'zero-drift'
+        No_Telemetry_Report: true            # Disable reporting cluster data
+        Scan_Config:
+          Auto_Scan: true
+        Scanner_Autoscale:
+          Strategy: delayed
+          Min_Pods: 1
+          Max_Pods: 3
   secret:
     # NOTE: files defined here have preferrence over the ones defined in the configmap section
     enabled: false
@@ -271,7 +266,7 @@ manager:
 #      - name: CUSTOM_PAGE_FOOTER_COLOR
 #        value: "#FFFFFF"
   svc:
-    type: NodePort # should be set to - ClusterIP
+    type: ClusterIP # should be set to - ClusterIP
     loadBalancerIP:
     annotations: {}
       # azure
