@@ -57,7 +57,7 @@ controller:
     # key1: value1
     # key2: value2
   apisvc:
-    type:
+    type: ClusterIP
     annotations: {}
     # OpenShift Route configuration
     # Controller supports HTTPS only, so edge termination not supported
@@ -174,7 +174,7 @@ controller:
     ingressClassName: haproxy
     path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
     annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       # ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName:
@@ -325,7 +325,7 @@ manager:
   
 cve:
   adapter:
-    enabled: false
+    enabled: true
     image:
       repository: neuvector/registry-adapter
       tag: 0.1.0
