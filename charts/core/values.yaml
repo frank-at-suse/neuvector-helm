@@ -355,7 +355,7 @@ cve:
       protocol: https
       secretName:
     svc:
-      type: NodePort # should be set to - ClusterIP
+      type: ClusterIP # should be set to - ClusterIP
       loadBalancerIP:
       annotations: {}
         # azure
