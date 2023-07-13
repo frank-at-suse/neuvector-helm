@@ -169,7 +169,7 @@ controller:
           #  -----BEGIN PRIVATE KEY-----
           #  -----END PRIVATE KEY-----
   ingress:
-    enabled: true
+    enabled: false
     host: nv-controller.felab.io
     ingressClassName: haproxy
     path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
@@ -294,11 +294,11 @@ manager:
   ingress:
     enabled: true
     host: neuvector.dev.felab.io
-    ingressClassName: ""
+    ingressClassName: "nginx"
     path: "/"
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      cert-manager.io/issuer: cluster-staging
+      cert-manager.io/issuer: cluster-production
       cert-manager.io/issuer-kind: ClusterIssuer
       # kubernetes.io/ingress.class: my-nginx
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
@@ -380,19 +380,21 @@ cve:
         #  -----BEGIN PRIVATE KEY-----
         #  -----END PRIVATE KEY-----
     ingress:
-      enabled: false
-      host:  # MUST be set, if ingress is enabled
-      ingressClassName: ""
+      enabled: true
+      host: scanner.dev.felab.io
+      ingressClassName: "nginx"
       path: "/"
       annotations:
+        cert-manager.io/issuer: cluster-production
+        cert-manager.io/issuer-kind: ClusterIssuer
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         # kubernetes.io/ingress.class: my-nginx
         # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
         # nginx.ingress.kubernetes.io/rewrite-target: /
         # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
         # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
-      tls: false
-      secretName:  # my-tls-secret
+      tls: true
+      secretName: scanner-ingress
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
         secret: neuvector-internal
